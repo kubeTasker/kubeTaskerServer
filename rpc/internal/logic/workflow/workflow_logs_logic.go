@@ -26,5 +26,8 @@ func NewWorkflowLogsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Work
 func (l *WorkflowLogsLogic) WorkflowLogs(in *core.WorkflowLogRequest, stream core.Core_WorkflowLogsServer) error {
 	// todo: add your logic here and delete this line
 
+	// Stream must supplement other logic by itself, and the logic is incomplete.
+	// /root/TeamProject/kubeTaskerServer/rpc/types/core/core_grpc.pb.go
+
 	return nil
 }

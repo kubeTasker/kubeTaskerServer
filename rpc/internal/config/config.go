@@ -10,7 +10,14 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
-	DatabaseConf config.DatabaseConf
-	CasbinConf   casbin.CasbinConf
-	RedisConf    redis.RedisConf
+	DatabaseConf    config.DatabaseConf
+	CasbinConf      casbin.CasbinConf
+	RedisConf       redis.RedisConf
+	WorkflowConConf WorkflowConConf
+	//WorkflowClientConf workflow.ClientConfig
+}
+
+type WorkflowConConf struct {
+	Host string `json:",env=WORKFLOW_CON_CONF_HOST"`
+	Port int    `json:",env=WORKFLOW_CON_CONF_PORT"`
 }

@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"context"
+	workflow2 "github.com/argoproj/argo-workflows/v3/pkg/apiclient/workflow"
 
 	"github.com/kubeTasker/kubeTaskerServer/rpc/internal/svc"
 	"github.com/kubeTasker/kubeTaskerServer/rpc/types/core"
@@ -25,6 +26,21 @@ func NewRetryWorkflowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ret
 
 func (l *RetryWorkflowLogic) RetryWorkflow(in *core.WorkflowRetryRequest) (*core.WorkflowRespond, error) {
 	// todo: add your logic here and delete this line
+	workflowRetryRequest := &workflow2.WorkflowRetryRequest{
+		Name:              in.Name,
+		Namespace:         in.Namespace,
+		RestartSuccessful: in.RestartSuccessful,
+		NodeFieldSelector: in.NodeFieldSelector,
+		Parameters:        in.Parameters,
+	}
 
-	return &core.WorkflowRespond{}, nil
+	resp, err := l.svcCtx.WorkflowClient.RetryWorkflow(l.ctx, workflowRetryRequest)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &core.WorkflowRespond{
+		Workflow: resp,
+	}, nil
 }
