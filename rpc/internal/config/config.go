@@ -18,6 +18,6 @@ type Config struct {
 }
 
 type WorkflowConConf struct {
-	Host string `json:",env=WORKFLOW_CON_CONF_HOST"`
-	Port int    `json:",env=WORKFLOW_CON_CONF_PORT"`
+	Host string `json:",env=WORKFLOW_CON_CONF_HOST"` // *.*.*.*:*
+	//Port int    `json:",env=WORKFLOW_CON_CONF_PORT"`
 }

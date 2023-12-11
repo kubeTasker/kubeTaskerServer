@@ -29,7 +29,7 @@ func NewServiceContext(c config.Config) (ctx *ServiceContext, err error) {
 		ent.Debug(), // debug mode
 	)
 
-	workflowGrpc, err := grpc.Dial(c.WorkflowConConf.Host)
+	workflowGrpc, err := grpc.Dial(c.WorkflowConConf.Host, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
