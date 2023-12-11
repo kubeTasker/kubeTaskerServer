@@ -10,37 +10,91 @@ info(
 
 import "../base.api"
 
-// WorkflowTerminateRequest
 type (
+    // WorkflowCreateRequest
     WorkflowCreateRequest {
         // Namespace
-        namespace string `json:"namespace"`
+        Namespace string `json:"namespace"`
 
         // Workflow
         // type :github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
-        workflow TypeNull `json:"workflow"`
+        Workflow TypeNull `json:"workflow"`
 
         // InstanceID
         // This field is no longer used.
-        instanceID string `json:"instanceId"`
+        InstanceID string `json:"instanceId"`
 
         // ServerDryRun
-        serverDryRun bool `json:"serverDryRun"`
+        ServerDryRun bool `json:"serverDryRun"`
 
         // CreateOptions
         // type: k8s.io.apimachinery.pkg.apis.meta.v1.CreateOptions
-        createOptions TypeNull `json:"createOptions"`
+        CreateOptions TypeNull `json:"createOptions"`
     }
 
-    WorkflowTerminateRequest {
+    // WorkflowGetRequest
+    WorkflowGetRequest {
         // Name
         Name  string `json:"name"`
 
         // Namespace
         Namespace  string `json:"namespace"`
+
+        // GetOptions
+        // type: k8s.io.apimachinery.pkg.apis.meta.v1.GetOptions
+        GetOptions  TypeNull `json:"getOptions"`
+
+        // Fields
+        Fields  string `json:"fields"`
     }
 
-        // WorkflowResumeRequest
+    // WorkflowListRequest
+    WorkflowListRequest {
+        // Namespace
+        Namespace  string `json:"namespace"`
+
+        // ListOptions
+        // type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
+        ListOptions  TypeNull `json:"listOptions"`
+
+        // Fields
+        Fields  string `json:"fields"`
+    }
+
+    // WorkflowResubmitRequest
+    WorkflowResubmitRequest {
+        // Name
+        Name  string `json:"name"`
+
+        // Namespace
+        Namespace  string `json:"namespace"`
+
+        // Memoized
+        Memoized  bool `json:"memoized"`
+
+        // Parameters
+        Parameters  []string `json:"parameters"`
+    }
+
+    // WorkflowRetryRequest
+    WorkflowRetryRequest {
+        // Name
+        Name  string `json:"name"`
+
+        // Namespace
+        Namespace  string `json:"namespace"`
+
+        // RestartSuccessful
+        RestartSuccessful  bool `json:"restartSuccessful"`
+
+        // NodeFieldSelector
+        NodeFieldSelector  string `json:"nodeFieldSelector"`
+
+        // Parameters
+        Parameters  []string `json:"parameters"`
+    }
+
+    // WorkflowResumeRequest
     WorkflowResumeRequest {
         // Name
         Name  string `json:"name"`
@@ -52,7 +106,61 @@ type (
         NodeFieldSelector  string `json:"nodeFieldSelector"`
     }
 
-        // WorkflowLogRequest
+    // WorkflowTerminateRequest
+    WorkflowTerminateRequest {
+        // Name
+        Name  string `json:"name"`
+
+        // Namespace
+        Namespace  string `json:"namespace"`
+    }
+
+    // WorkflowStopRequest
+    WorkflowStopRequest {
+        // Name
+        Name  string `json:"name"`
+
+        // Namespace
+        Namespace  string `json:"namespace"`
+
+        // NodeFieldSelector
+        NodeFieldSelector  string `json:"nodeFieldSelector"`
+
+        // Message
+        Message  string `json:"message"`
+    }
+
+    // WorkflowSetRequest
+    WorkflowSetRequest {
+        // Name
+        Name  string `json:"name"`
+
+        // Namespace
+        Namespace  string `json:"namespace"`
+
+        // NodeFieldSelector
+        NodeFieldSelector  string `json:"nodeFieldSelector"`
+
+        // Message
+        Message  string `json:"message"`
+
+        // Phase
+        Phase  string `json:"phase"`
+
+        // OutputParameters
+        OutputParameters  string `json:"outputParameters"`
+    }
+
+    // WorkflowSuspendRequest
+    WorkflowSuspendRequest {
+        // Name
+        Name  string `json:"name"`
+
+        // Namespace
+        Namespace  string `json:"namespace"`
+    }
+
+    // WorkflowLogRequest
     WorkflowLogRequest {
         // Name
         Name  string `json:"name"`
@@ -74,142 +182,7 @@ type (
         Selector  string `json:"selector"`
     }
 
-        // WorkflowSetRequest
-    WorkflowSetRequest {
-        // Name
-        Name  string `json:"name"`
-
-        // Namespace
-        Namespace  string `json:"namespace"`
-
-        // NodeFieldSelector
-        NodeFieldSelector  string `json:"nodeFieldSelector"`
-
-        // Message
-        Message  string `json:"message"`
-
-        // Phase
-        Phase  string `json:"phase"`
-
-        // OutputParameters
-        OutputParameters  string `json:"outputParameters"`
-    }
-
-        // WorkflowListRequest
-    WorkflowListRequest {
-        // Namespace
-        Namespace  string `json:"namespace"`
-
-        // ListOptions
-        // type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
-        ListOptions  TypeNull `json:"listOptions"`
-
-        // Fields
-        Fields  string `json:"fields"`
-    }
-
-        // WorkflowDeleteResponse
-    WorkflowDeleteResponse {
-    }
-
-        // WorkflowWatchEvent
-    WorkflowWatchEvent {
-        // Type
-        Type  string `json:"type"`
-
-        // Object
-        // type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
-        Object  TypeNull `json:"object"`
-    }
-
-        // LogEntry
-    LogEntry {
-        // Content
-        Content  string `json:"content"`
-
-        // PodName
-        PodName  string `json:"podName"`
-    }
-
-        // WorkflowGetRequest
-    WorkflowGetRequest {
-        // Name
-        Name  string `json:"name"`
-
-        // Namespace
-        Namespace  string `json:"namespace"`
-
-        // GetOptions
-        // type: k8s.io.apimachinery.pkg.apis.meta.v1.GetOptions
-        GetOptions  TypeNull `json:"getOptions"`
-
-        // Fields
-        Fields  string `json:"fields"`
-    }
-
-        // WatchWorkflowsRequest
-    WatchWorkflowsRequest {
-        // Namespace
-        Namespace  string `json:"namespace"`
-
-        // ListOptions
-        // type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
-        ListOptions  TypeNull `json:"listOptions"`
-
-        // Fields
-        Fields  string `json:"fields"`
-    }
-
-        // WorkflowResubmitRequest
-    WorkflowResubmitRequest {
-        // Name
-        Name  string `json:"name"`
-
-        // Namespace
-        Namespace  string `json:"namespace"`
-
-        // Memoized
-        Memoized  bool `json:"memoized"`
-
-        // Parameters
-        Parameters  []string `json:"parameters"`
-    }
-
-        // WorkflowStopRequest
-    WorkflowStopRequest {
-        // Name
-        Name  string `json:"name"`
-
-        // Namespace
-        Namespace  string `json:"namespace"`
-
-        // NodeFieldSelector
-        NodeFieldSelector  string `json:"nodeFieldSelector"`
-
-        // Message
-        Message  string `json:"message"`
-    }
-
-        // WatchEventsRequest
-    WatchEventsRequest {
-        // Namespace
-        Namespace  string `json:"namespace"`
-
-        // ListOptions
-        // type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
-        ListOptions  TypeNull `json:"listOptions"`
-    }
-
-        // WorkflowSuspendRequest
-    WorkflowSuspendRequest {
-        // Name
-        Name  string `json:"name"`
-
-        // Namespace
-        Namespace  string `json:"namespace"`
-    }
-
-        // WorkflowDeleteRequest
+    // WorkflowDeleteRequest
     WorkflowDeleteRequest {
         // Name
         Name  string `json:"name"`
@@ -225,7 +198,53 @@ type (
         Force  bool `json:"force"`
     }
 
-        // WorkflowLintRequest
+    // WorkflowDeleteResponse
+    WorkflowDeleteResponse {
+    }
+
+    // WatchWorkflowsRequest
+    WatchWorkflowsRequest {
+        // Namespace
+        Namespace  string `json:"namespace"`
+
+        // ListOptions
+        // type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
+        ListOptions  TypeNull `json:"listOptions"`
+
+        // Fields
+        Fields  string `json:"fields"`
+    }
+
+    // WorkflowWatchEvent
+    WorkflowWatchEvent {
+        // Type
+        Type  string `json:"type"`
+
+        // Object
+        // type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
+        Object  TypeNull `json:"object"`
+    }
+
+    // WatchEventsRequest
+    WatchEventsRequest {
+        // Namespace
+        Namespace  string `json:"namespace"`
+
+        // ListOptions
+        // type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
+        ListOptions  TypeNull `json:"listOptions"`
+    }
+
+    // LogEntry
+    LogEntry {
+        // Content
+        Content  string `json:"content"`
+
+        // PodName
+        PodName  string `json:"podName"`
+    }
+
+    // WorkflowLintRequest
     WorkflowLintRequest {
         // Namespace
         Namespace  string `json:"namespace"`
@@ -235,46 +254,7 @@ type (
         Workflow  TypeNull `json:"workflow"`
     }
 
-        // WorkflowRetryRequest
-    WorkflowRetryRequest {
-        // Name
-        Name  string `json:"name"`
-
-        // Namespace
-        Namespace  string `json:"namespace"`
-
-        // RestartSuccessful
-        RestartSuccessful  bool `json:"restartSuccessful"`
-
-        // NodeFieldSelector
-        NodeFieldSelector  string `json:"nodeFieldSelector"`
-
-        // Parameters
-        Parameters  []string `json:"parameters"`
-    }
-
-        // WorkflowRespond
-    WorkflowRespond {
-        // Workflow
-        // type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
-        Workflow  TypeNull `json:"workflow"`
-    }
-
-        // WorkflowListRespond
-    WorkflowListRespond {
-        // WorkflowList
-        // type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.WorkflowList
-        WorkflowList  TypeNull `json:"workflowList"`
-    }
-
-        // Event
-    Event {
-        // Event
-        // type: k8s.io.api.core.v1.Event
-        Event  TypeNull `json:"event"`
-    }
-
-        // WorkflowSubmitRequest
+    // WorkflowSubmitRequest
     WorkflowSubmitRequest {
         // Namespace
         Namespace  string `json:"namespace"`
@@ -290,15 +270,42 @@ type (
         SubmitOptions  TypeNull `json:"submitOptions"`
     }
 
+    // WorkflowRespond
+    WorkflowRespond {
+        // Workflow
+        // type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
+        Workflow  TypeNull `json:"workflow"`
+    }
+
+    // WorkflowListRespond
+    WorkflowListRespond {
+        // WorkflowList
+        // type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.WorkflowList
+        WorkflowList  TypeNull `json:"workflowList"`
+    }
+
+    // Event
+    Event {
+        // Event
+        // type: k8s.io.api.core.v1.Event
+        Event  TypeNull `json:"event"`
+    }
+
+    // WorkflowWatchEventList
     WorkflowWatchEventList {
+        // WorkflowWatchEventList
         workflowWatchEventList []WorkflowWatchEvent `json:"workflowWatchEventList"`
     }
 
+    // EventList
     EventList {
+        // EventList
         eventList []Event `json:"eventList"`
     }
 
+    // LogEntryList
     LogEntryList {
+        // LogEntryList
         LogEntryList []LogEntry `json:"logEntryList"`
     }
 )
