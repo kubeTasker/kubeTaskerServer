@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"context"
+	workflow2 "github.com/argoproj/argo-workflows/v3/pkg/apiclient/workflow"
 
 	"github.com/kubeTasker/kubeTaskerServer/rpc/internal/svc"
 	"github.com/kubeTasker/kubeTaskerServer/rpc/types/core"
@@ -25,6 +26,18 @@ func NewLintWorkflowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Lint
 
 func (l *LintWorkflowLogic) LintWorkflow(in *core.WorkflowLintRequest) (*core.WorkflowRespond, error) {
 	// todo: add your logic here and delete this line
+	workflowLintRequest := &workflow2.WorkflowLintRequest{
+		Namespace: in.Namespace,
+		Workflow:  in.Workflow,
+	}
 
-	return &core.WorkflowRespond{}, nil
+	resp, err := l.svcCtx.WorkflowClient.LintWorkflow(l.ctx, workflowLintRequest)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &core.WorkflowRespond{
+		Workflow: resp,
+	}, nil
 }

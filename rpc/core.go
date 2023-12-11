@@ -23,7 +23,11 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c, conf.UseEnv())
-	ctx := svc.NewServiceContext(c)
+	ctx, err := svc.NewServiceContext(c)
+	if err != nil {
+		fmt.Println("An error occurred:", err)
+		return
+	}
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		core.RegisterCoreServer(grpcServer, server.NewCoreServer(ctx))

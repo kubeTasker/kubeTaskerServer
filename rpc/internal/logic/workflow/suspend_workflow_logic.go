@@ -2,6 +2,7 @@ package workflow
 
 import (
 	"context"
+	workflow2 "github.com/argoproj/argo-workflows/v3/pkg/apiclient/workflow"
 
 	"github.com/kubeTasker/kubeTaskerServer/rpc/internal/svc"
 	"github.com/kubeTasker/kubeTaskerServer/rpc/types/core"
@@ -25,6 +26,18 @@ func NewSuspendWorkflowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *S
 
 func (l *SuspendWorkflowLogic) SuspendWorkflow(in *core.WorkflowSuspendRequest) (*core.WorkflowRespond, error) {
 	// todo: add your logic here and delete this line
+	workflowSuspendRequest := &workflow2.WorkflowSuspendRequest{
+		Name:      in.Name,
+		Namespace: in.Namespace,
+	}
 
-	return &core.WorkflowRespond{}, nil
+	resp, err := l.svcCtx.WorkflowClient.SuspendWorkflow(l.ctx, workflowSuspendRequest)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &core.WorkflowRespond{
+		Workflow: resp,
+	}, nil
 }

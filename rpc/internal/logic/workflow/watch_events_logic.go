@@ -26,5 +26,8 @@ func NewWatchEventsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Watch
 func (l *WatchEventsLogic) WatchEvents(in *core.WatchEventsRequest, stream core.Core_WatchEventsServer) error {
 	// todo: add your logic here and delete this line
 
+	// Stream must supplement other logic by itself, and the logic is incomplete.
+	// /root/TeamProject/kubeTaskerServer/rpc/types/core/core_grpc.pb.go
+
 	return nil
 }
