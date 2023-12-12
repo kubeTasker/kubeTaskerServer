@@ -31,7 +31,6 @@ type (
 	DictionaryListReq        = core.DictionaryListReq
 	DictionaryListResp       = core.DictionaryListResp
 	Empty                    = core.Empty
-	Event                    = core.Event
 	IDReq                    = core.IDReq
 	IDsReq                   = core.IDsReq
 	LogEntry                 = core.LogEntry
@@ -63,7 +62,6 @@ type (
 	UserListReq              = core.UserListReq
 	UserListResp             = core.UserListResp
 	UsernameReq              = core.UsernameReq
-	WatchEventsRequest       = core.WatchEventsRequest
 	WatchWorkflowsRequest    = core.WatchWorkflowsRequest
 	WorkflowCreateRequest    = core.WorkflowCreateRequest
 	WorkflowDeleteRequest    = core.WorkflowDeleteRequest
@@ -71,15 +69,12 @@ type (
 	WorkflowGetRequest       = core.WorkflowGetRequest
 	WorkflowLintRequest      = core.WorkflowLintRequest
 	WorkflowListRequest      = core.WorkflowListRequest
-	WorkflowListRespond      = core.WorkflowListRespond
+	WorkflowListResponse     = core.WorkflowListResponse
 	WorkflowLogRequest       = core.WorkflowLogRequest
-	WorkflowRespond          = core.WorkflowRespond
+	WorkflowResponse         = core.WorkflowResponse
 	WorkflowResubmitRequest  = core.WorkflowResubmitRequest
 	WorkflowResumeRequest    = core.WorkflowResumeRequest
 	WorkflowRetryRequest     = core.WorkflowRetryRequest
-	WorkflowSetRequest       = core.WorkflowSetRequest
-	WorkflowStopRequest      = core.WorkflowStopRequest
-	WorkflowSubmitRequest    = core.WorkflowSubmitRequest
 	WorkflowSuspendRequest   = core.WorkflowSuspendRequest
 	WorkflowTerminateRequest = core.WorkflowTerminateRequest
 	WorkflowWatchEvent       = core.WorkflowWatchEvent
@@ -153,23 +148,18 @@ type (
 		GetUserByUsername(ctx context.Context, in *UsernameReq, opts ...grpc.CallOption) (*UserInfo, error)
 		DeleteUser(ctx context.Context, in *UUIDsReq, opts ...grpc.CallOption) (*BaseResp, error)
 		// Workflow management
-		CreateWorkflow(ctx context.Context, in *WorkflowCreateRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		GetWorkflow(ctx context.Context, in *WorkflowGetRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		ListWorkflows(ctx context.Context, in *WorkflowListRequest, opts ...grpc.CallOption) (*WorkflowListRespond, error)
+		CreateWorkflow(ctx context.Context, in *WorkflowCreateRequest, opts ...grpc.CallOption) (*WorkflowResponse, error)
+		GetWorkflow(ctx context.Context, in *WorkflowGetRequest, opts ...grpc.CallOption) (*WorkflowResponse, error)
+		ListWorkflows(ctx context.Context, in *WorkflowListRequest, opts ...grpc.CallOption) (*WorkflowListResponse, error)
 		WatchWorkflows(ctx context.Context, in *WatchWorkflowsRequest, opts ...grpc.CallOption) (core.Core_WatchWorkflowsClient, error)
-		WatchEvents(ctx context.Context, in *WatchEventsRequest, opts ...grpc.CallOption) (core.Core_WatchEventsClient, error)
 		DeleteWorkflow(ctx context.Context, in *WorkflowDeleteRequest, opts ...grpc.CallOption) (*WorkflowDeleteResponse, error)
-		RetryWorkflow(ctx context.Context, in *WorkflowRetryRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		ResubmitWorkflow(ctx context.Context, in *WorkflowResubmitRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		ResumeWorkflow(ctx context.Context, in *WorkflowResumeRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		SuspendWorkflow(ctx context.Context, in *WorkflowSuspendRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		TerminateWorkflow(ctx context.Context, in *WorkflowTerminateRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		StopWorkflow(ctx context.Context, in *WorkflowStopRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		SetWorkflow(ctx context.Context, in *WorkflowSetRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
-		LintWorkflow(ctx context.Context, in *WorkflowLintRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
+		RetryWorkflow(ctx context.Context, in *WorkflowRetryRequest, opts ...grpc.CallOption) (*WorkflowResponse, error)
+		ResubmitWorkflow(ctx context.Context, in *WorkflowResubmitRequest, opts ...grpc.CallOption) (*WorkflowResponse, error)
+		ResumeWorkflow(ctx context.Context, in *WorkflowResumeRequest, opts ...grpc.CallOption) (*WorkflowResponse, error)
+		SuspendWorkflow(ctx context.Context, in *WorkflowSuspendRequest, opts ...grpc.CallOption) (*WorkflowResponse, error)
+		TerminateWorkflow(ctx context.Context, in *WorkflowTerminateRequest, opts ...grpc.CallOption) (*WorkflowResponse, error)
+		LintWorkflow(ctx context.Context, in *WorkflowLintRequest, opts ...grpc.CallOption) (*WorkflowResponse, error)
 		PodLogs(ctx context.Context, in *WorkflowLogRequest, opts ...grpc.CallOption) (core.Core_PodLogsClient, error)
-		WorkflowLogs(ctx context.Context, in *WorkflowLogRequest, opts ...grpc.CallOption) (core.Core_WorkflowLogsClient, error)
-		SubmitWorkflow(ctx context.Context, in *WorkflowSubmitRequest, opts ...grpc.CallOption) (*WorkflowRespond, error)
 	}
 
 	defaultCore struct {
@@ -483,17 +473,17 @@ func (m *defaultCore) DeleteUser(ctx context.Context, in *UUIDsReq, opts ...grpc
 }
 
 // Workflow management
-func (m *defaultCore) CreateWorkflow(ctx context.Context, in *WorkflowCreateRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
+func (m *defaultCore) CreateWorkflow(ctx context.Context, in *WorkflowCreateRequest, opts ...grpc.CallOption) (*WorkflowResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.CreateWorkflow(ctx, in, opts...)
 }
 
-func (m *defaultCore) GetWorkflow(ctx context.Context, in *WorkflowGetRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
+func (m *defaultCore) GetWorkflow(ctx context.Context, in *WorkflowGetRequest, opts ...grpc.CallOption) (*WorkflowResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.GetWorkflow(ctx, in, opts...)
 }
 
-func (m *defaultCore) ListWorkflows(ctx context.Context, in *WorkflowListRequest, opts ...grpc.CallOption) (*WorkflowListRespond, error) {
+func (m *defaultCore) ListWorkflows(ctx context.Context, in *WorkflowListRequest, opts ...grpc.CallOption) (*WorkflowListResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.ListWorkflows(ctx, in, opts...)
 }
@@ -503,52 +493,37 @@ func (m *defaultCore) WatchWorkflows(ctx context.Context, in *WatchWorkflowsRequ
 	return client.WatchWorkflows(ctx, in, opts...)
 }
 
-func (m *defaultCore) WatchEvents(ctx context.Context, in *WatchEventsRequest, opts ...grpc.CallOption) (core.Core_WatchEventsClient, error) {
-	client := core.NewCoreClient(m.cli.Conn())
-	return client.WatchEvents(ctx, in, opts...)
-}
-
 func (m *defaultCore) DeleteWorkflow(ctx context.Context, in *WorkflowDeleteRequest, opts ...grpc.CallOption) (*WorkflowDeleteResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.DeleteWorkflow(ctx, in, opts...)
 }
 
-func (m *defaultCore) RetryWorkflow(ctx context.Context, in *WorkflowRetryRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
+func (m *defaultCore) RetryWorkflow(ctx context.Context, in *WorkflowRetryRequest, opts ...grpc.CallOption) (*WorkflowResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.RetryWorkflow(ctx, in, opts...)
 }
 
-func (m *defaultCore) ResubmitWorkflow(ctx context.Context, in *WorkflowResubmitRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
+func (m *defaultCore) ResubmitWorkflow(ctx context.Context, in *WorkflowResubmitRequest, opts ...grpc.CallOption) (*WorkflowResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.ResubmitWorkflow(ctx, in, opts...)
 }
 
-func (m *defaultCore) ResumeWorkflow(ctx context.Context, in *WorkflowResumeRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
+func (m *defaultCore) ResumeWorkflow(ctx context.Context, in *WorkflowResumeRequest, opts ...grpc.CallOption) (*WorkflowResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.ResumeWorkflow(ctx, in, opts...)
 }
 
-func (m *defaultCore) SuspendWorkflow(ctx context.Context, in *WorkflowSuspendRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
+func (m *defaultCore) SuspendWorkflow(ctx context.Context, in *WorkflowSuspendRequest, opts ...grpc.CallOption) (*WorkflowResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.SuspendWorkflow(ctx, in, opts...)
 }
 
-func (m *defaultCore) TerminateWorkflow(ctx context.Context, in *WorkflowTerminateRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
+func (m *defaultCore) TerminateWorkflow(ctx context.Context, in *WorkflowTerminateRequest, opts ...grpc.CallOption) (*WorkflowResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.TerminateWorkflow(ctx, in, opts...)
 }
 
-func (m *defaultCore) StopWorkflow(ctx context.Context, in *WorkflowStopRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
-	client := core.NewCoreClient(m.cli.Conn())
-	return client.StopWorkflow(ctx, in, opts...)
-}
-
-func (m *defaultCore) SetWorkflow(ctx context.Context, in *WorkflowSetRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
-	client := core.NewCoreClient(m.cli.Conn())
-	return client.SetWorkflow(ctx, in, opts...)
-}
-
-func (m *defaultCore) LintWorkflow(ctx context.Context, in *WorkflowLintRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
+func (m *defaultCore) LintWorkflow(ctx context.Context, in *WorkflowLintRequest, opts ...grpc.CallOption) (*WorkflowResponse, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.LintWorkflow(ctx, in, opts...)
 }
@@ -556,14 +531,4 @@ func (m *defaultCore) LintWorkflow(ctx context.Context, in *WorkflowLintRequest,
 func (m *defaultCore) PodLogs(ctx context.Context, in *WorkflowLogRequest, opts ...grpc.CallOption) (core.Core_PodLogsClient, error) {
 	client := core.NewCoreClient(m.cli.Conn())
 	return client.PodLogs(ctx, in, opts...)
-}
-
-func (m *defaultCore) WorkflowLogs(ctx context.Context, in *WorkflowLogRequest, opts ...grpc.CallOption) (core.Core_WorkflowLogsClient, error) {
-	client := core.NewCoreClient(m.cli.Conn())
-	return client.WorkflowLogs(ctx, in, opts...)
-}
-
-func (m *defaultCore) SubmitWorkflow(ctx context.Context, in *WorkflowSubmitRequest, opts ...grpc.CallOption) (*WorkflowRespond, error) {
-	client := core.NewCoreClient(m.cli.Conn())
-	return client.SubmitWorkflow(ctx, in, opts...)
 }
