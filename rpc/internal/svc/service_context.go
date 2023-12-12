@@ -1,11 +1,8 @@
 package svc
 
 import (
-	"github.com/argoproj/argo-workflows/v3/pkg/apiclient/workflow"
 	"github.com/kubeTasker/kubeTaskerServer/rpc/ent"
 	"github.com/kubeTasker/kubeTaskerServer/rpc/internal/config"
-	"google.golang.org/grpc"
-
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 
@@ -15,11 +12,9 @@ import (
 
 type ServiceContext struct {
 	context.Context
-	Config         config.Config
-	DB             *ent.Client
-	Redis          *redis.Redis
-	WorkflowClient workflow.WorkflowServiceClient
-	//WorkflowClient *
+	Config config.Config
+	DB     *ent.Client
+	Redis  *redis.Redis
 }
 
 func NewServiceContext(c config.Config) (ctx *ServiceContext, err error) {
@@ -29,16 +24,14 @@ func NewServiceContext(c config.Config) (ctx *ServiceContext, err error) {
 		ent.Debug(), // debug mode
 	)
 
-	workflowGrpc, err := grpc.Dial(c.WorkflowConConf.Host, grpc.WithInsecure())
 	if err != nil {
 		return nil, err
 	}
 
 	return &ServiceContext{
-		Config:         c,
-		DB:             db,
-		Redis:          redis.MustNewRedis(c.RedisConf),
-		WorkflowClient: workflow.NewWorkflowServiceClient(workflowGrpc),
+		Config: c,
+		DB:     db,
+		Redis:  redis.MustNewRedis(c.RedisConf),
 	}, nil
 
 }

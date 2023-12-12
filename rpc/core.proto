@@ -3,11 +3,26 @@ syntax = "proto3";
 package core;
 option go_package="./core";
 
+import "k8s.io/api@v0.28.4/core/v1/generated.proto";
+
 import "k8s.io/apimachinery@v0.28.4/pkg/apis/meta/v1/generated.proto";
 
-import "github.com/argoproj/argo-workflows/pkg/apis/workflow/v1alpha1/generated.proto";
+import "github.com/kube!tasker/kube!tasker@v0.1.0/pkg/apis/workflow/v1alpha1/generated.proto";
 
-import "k8s.io/api@v0.28.4/core/v1/generated.proto";
+message OauthProviderInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional string name = 4;
+  optional string client_id = 5;
+  optional string client_secret = 6;
+  optional string redirect_url = 7;
+  optional string scopes = 8;
+  optional string auth_url = 9;
+  optional string token_url = 10;
+  optional uint64 auth_style = 11;
+  optional string info_url = 12;
+}
 
 message CallbackReq {
   string state = 1;
@@ -19,109 +34,39 @@ message UserListResp {
   repeated UserInfo data = 2;
 }
 
-message WorkflowGetRequest {
-  string name = 1;
-  string namespace = 2;
-  k8s.io.apimachinery.pkg.apis.meta.v1.GetOptions getOptions = 3;
-  //  Fields to be included or excluded in the response. e.g. "spec,status.phase", "-status.nodes"
-  string fields = 4;
+//  base message
+message Empty {}
+
+message IDReq {
+  uint64 id = 1;
 }
 
-message WorkflowSuspendRequest {
-  string name = 1;
-  string namespace = 2;
+message IDsReq {
+  repeated uint64 ids = 1;
 }
 
-message BaseMsg {
-  string msg = 1;
-}
-
-message DictionaryDetailInfo {
-  optional uint64 id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional uint32 status = 4;
-  optional string title = 5;
-  optional string key = 6;
-  optional string value = 7;
-  optional uint64 dictionary_id = 8;
-  optional uint32 sort = 9;
-}
-
-message DictionaryListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string name = 3;
-}
-
-message DictionaryDetailListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional uint64 dictionary_id = 3;
-  optional string key = 4;
-}
-
-message OauthProviderListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string name = 3;
-}
-
-message WorkflowListRespond {
-  github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.WorkflowList workflowList = 1;
-}
-
-message Event {
-  k8s.io.api.core.v1.Event event = 1;
-}
-
-message PageInfoReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-}
-
-message MenuRoleListResp {
+message DictionaryListResp {
   uint64 total = 1;
-  repeated MenuRoleInfo data = 2;
+  repeated DictionaryInfo data = 2;
 }
 
-message DepartmentListReq {
+message UserListReq {
   uint64 page = 1;
   uint64 page_size = 2;
-  optional string name = 3;
-  optional string leader = 4;
+  optional string username = 3;
+  optional string nickname = 4;
+  optional string email = 5;
+  optional string mobile = 6;
+  repeated uint64 role_ids = 7;
+  optional uint64 department_id = 8;
+  repeated uint64 position_ids = 9;
 }
 
-message WorkflowListRequest {
-  string namespace = 1;
-  k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions listOptions = 2;
-  //  Fields to be included or excluded in the response. e.g. "items.spec,items.status.phase", "-items.status.nodes"
-  string fields = 3;
-}
-
-message WatchWorkflowsRequest {
-  string namespace = 1;
-  k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions listOptions = 2;
-  string fields = 3;
-}
-
-message BaseResp {
-  string msg = 1;
-}
-
-message DepartmentListResp {
-  uint64 total = 1;
-  repeated DepartmentInfo data = 2;
-}
-
-message PositionListResp {
-  uint64 total = 1;
-  repeated PositionInfo data = 2;
-}
-
-message WorkflowTerminateRequest {
-  string name = 1;
-  string namespace = 2;
+message WorkflowWatchEvent {
+  //  the type of change
+  string type = 1;
+  //  the workflow
+  github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow object = 2;
 }
 
 message ApiListReq {
@@ -134,72 +79,103 @@ message ApiListReq {
   optional string is_default = 7;
 }
 
+message PositionInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional uint32 sort = 5;
+  optional string name = 6;
+  optional string code = 7;
+  optional string remark = 8;
+}
+
+message RoleInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional string name = 5;
+  optional string code = 6;
+  optional string default_router = 7;
+  optional string remark = 8;
+  optional uint32 sort = 9;
+}
+
+message TokenInfo {
+  optional string id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional string uuid = 5;
+  optional string token = 6;
+  optional string source = 7;
+  optional int64 expired_at = 8;
+}
+
+message WorkflowListRequest {
+  string namespace = 1;
+  k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions listOptions = 2;
+}
+
+message WorkflowDeleteResponse {}
+
+message ApiInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional string path = 4;
+  optional string description = 5;
+  optional string api_group = 6;
+  optional string method = 7;
+  optional bool is_required = 8;
+}
+
 //  authorization message
 message RoleMenuAuthorityReq {
   uint64 role_id = 1;
   repeated uint64 menu_id = 2;
 }
 
-message DictionaryInfo {
-  optional uint64 id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional uint32 status = 4;
-  optional string title = 5;
-  optional string name = 6;
-  optional string desc = 7;
+message RoleListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string name = 3;
+  optional string code = 4;
+  optional string default_router = 5;
 }
 
-message DictionaryDetailListResp {
-  uint64 total = 1;
-  repeated DictionaryDetailInfo data = 2;
+message TokenListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string username = 3;
+  optional string nickname = 4;
+  optional string email = 5;
+  optional string uuid = 6;
 }
-
-message MenuInfoList {
-  uint64 total = 1;
-  repeated MenuInfo data = 2;
-}
-
-message RoleListResp {
-  uint64 total = 1;
-  repeated RoleInfo data = 2;
-}
-
-message WorkflowCreateRequest {
-  string namespace = 1;
-  github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow workflow = 2;
-  //  This field is no longer used.
-  string instanceID = 3;
-  bool serverDryRun = 4;
-  k8s.io.apimachinery.pkg.apis.meta.v1.CreateOptions createOptions = 5;
-}
-
-message WorkflowStopRequest {
-  string name = 1;
-  string namespace = 2;
-  string nodeFieldSelector = 3;
-  string message = 4;
-}
-
-//  base message
-message Empty {}
 
 message UUIDsReq {
   repeated string ids = 1;
 }
 
-message WatchEventsRequest {
-  string namespace = 1;
-  k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions listOptions = 2;
+message Meta {
+  optional string title = 1;
+  optional string icon = 2;
+  optional bool hide_menu = 3;
+  optional bool hide_breadcrumb = 4;
+  optional bool ignore_keep_alive = 5;
+  optional bool hide_tab = 6;
+  optional string frame_src = 7;
+  optional bool carry_param = 8;
+  optional bool hide_children_in_menu = 9;
+  optional bool affix = 10;
+  optional uint32 dynamic_level = 11;
+  optional string real_path = 12;
 }
 
-message WorkflowRespond {
-  github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow workflow = 1;
-}
-
-message BaseUUIDResp {
-  string id = 1;
-  string msg = 2;
+message RoleListResp {
+  uint64 total = 1;
+  repeated RoleInfo data = 2;
 }
 
 message UserInfo {
@@ -222,25 +198,190 @@ message UserInfo {
   repeated string role_name = 17;
 }
 
-message Meta {
-  optional string title = 1;
-  optional string icon = 2;
-  optional bool hide_menu = 3;
-  optional bool hide_breadcrumb = 4;
-  optional bool ignore_keep_alive = 5;
-  optional bool hide_tab = 6;
-  optional string frame_src = 7;
-  optional bool carry_param = 8;
-  optional bool hide_children_in_menu = 9;
-  optional bool affix = 10;
-  optional uint32 dynamic_level = 11;
-  optional string real_path = 12;
+message WorkflowResubmitRequest {
+  string name = 1;
+  string namespace = 2;
+  bool memoized = 3;
+}
+
+message WorkflowResponse {
+  github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow workflow = 1;
+}
+
+message ApiListResp {
+  uint64 total = 1;
+  repeated ApiInfo data = 2;
+}
+
+message BaseResp {
+  string msg = 1;
+}
+
+message DictionaryDetailListResp {
+  uint64 total = 1;
+  repeated DictionaryDetailInfo data = 2;
+}
+
+message MenuRoleListResp {
+  uint64 total = 1;
+  repeated MenuRoleInfo data = 2;
+}
+
+message PositionListResp {
+  uint64 total = 1;
+  repeated PositionInfo data = 2;
+}
+
+message WorkflowDeleteRequest {
+  string name = 1;
+  string namespace = 2;
+  k8s.io.apimachinery.pkg.apis.meta.v1.DeleteOptions deleteOptions = 3;
+}
+
+message WatchWorkflowsRequest {
+  string namespace = 1;
+  k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions listOptions = 2;
+}
+
+//  return the role's authorization menu's ids
+message RoleMenuAuthorityResp {
+  repeated uint64 menu_id = 1;
+}
+
+message PageInfoReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+}
+
+message BaseIDResp {
+  uint64 id = 1;
+  string msg = 2;
+}
+
+message WorkflowGetRequest {
+  string name = 1;
+  string namespace = 2;
+  k8s.io.apimachinery.pkg.apis.meta.v1.GetOptions getOptions = 3;
+}
+
+message DepartmentListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string name = 3;
+  optional string leader = 4;
 }
 
 message MenuRoleInfo {
   uint64 id = 1;
   uint64 menu_id = 2;
   uint64 role_id = 3;
+}
+
+message WorkflowRetryRequest {
+  string name = 1;
+  string namespace = 2;
+}
+
+message DepartmentInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional uint32 sort = 5;
+  optional string name = 6;
+  optional string ancestors = 7;
+  optional string leader = 8;
+  optional string phone = 9;
+  optional string email = 10;
+  optional string remark = 11;
+  optional uint64 parent_id = 12;
+}
+
+message DictionaryListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string name = 3;
+}
+
+message MenuInfoList {
+  uint64 total = 1;
+  repeated MenuInfo data = 2;
+}
+
+//  Workflow Service
+// 
+//  Workflow Service API performs CRUD actions against application resources
+message WorkflowCreateRequest {
+  string namespace = 1;
+  github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow workflow = 2;
+  string instanceID = 3;
+  bool serverDryRun = 4;
+  k8s.io.apimachinery.pkg.apis.meta.v1.CreateOptions createOptions = 5;
+}
+
+message OauthProviderListResp {
+  uint64 total = 1;
+  repeated OauthProviderInfo data = 2;
+}
+
+message OauthProviderListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional string name = 3;
+}
+
+message WorkflowListResponse {
+  github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.WorkflowList workflowlist = 1;
+}
+
+message UUIDReq {
+  string id = 1;
+}
+
+message BaseUUIDResp {
+  string id = 1;
+  string msg = 2;
+}
+
+message WorkflowLogRequest {
+  string name = 1;
+  string namespace = 2;
+  string podName = 3;
+  k8s.io.api.core.v1.PodLogOptions logOptions = 4;
+}
+
+message UsernameReq {
+  string username = 1;
+}
+
+message WorkflowTerminateRequest {
+  string name = 1;
+  string namespace = 2;
+}
+
+message WorkflowLintRequest {
+  string namespace = 1;
+  github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow workflow = 2;
+}
+
+message DepartmentListResp {
+  uint64 total = 1;
+  repeated DepartmentInfo data = 2;
+}
+
+message DictionaryInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional string title = 5;
+  optional string name = 6;
+  optional string desc = 7;
+}
+
+message OauthLoginReq {
+  string state = 1;
+  string provider = 2;
 }
 
 message PositionListReq {
@@ -251,20 +392,8 @@ message PositionListReq {
   optional string remark = 5;
 }
 
-message WorkflowLintRequest {
-  string namespace = 1;
-  github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow workflow = 2;
-}
-
-message ApiInfo {
-  optional uint64 id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional string path = 4;
-  optional string description = 5;
-  optional string api_group = 6;
-  optional string method = 7;
-  optional bool is_required = 8;
+message BaseMsg {
+  string msg = 1;
 }
 
 message MenuInfo {
@@ -283,39 +412,36 @@ message MenuInfo {
   optional uint32 menu_type = 13;
 }
 
-message WorkflowSubmitRequest {
-  string namespace = 1;
-  string resourceKind = 2;
-  string resourceName = 3;
-  github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.SubmitOpts submitOptions = 4;
+message OauthRedirectResp {
+  string url = 1;
 }
 
-message WorkflowLogRequest {
+message WorkflowSuspendRequest {
   string name = 1;
   string namespace = 2;
-  string podName = 3;
-  k8s.io.api.core.v1.PodLogOptions logOptions = 4;
-  string grep = 5;
-  string selector = 6;
 }
 
-message WorkflowWatchEvent {
-  //  the type of change
-  string type = 1;
-  //  the workflow
-  github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow object = 2;
+message LogEntry {
+  string content = 1;
 }
 
-message IDsReq {
-  repeated uint64 ids = 1;
+message DictionaryDetailInfo {
+  optional uint64 id = 1;
+  optional int64 created_at = 2;
+  optional int64 updated_at = 3;
+  optional uint32 status = 4;
+  optional string title = 5;
+  optional string key = 6;
+  optional string value = 7;
+  optional uint64 dictionary_id = 8;
+  optional uint32 sort = 9;
 }
 
-message WorkflowRetryRequest {
-  string name = 1;
-  string namespace = 2;
-  bool restartSuccessful = 3;
-  string nodeFieldSelector = 4;
-  repeated string parameters = 5;
+message DictionaryDetailListReq {
+  uint64 page = 1;
+  uint64 page_size = 2;
+  optional uint64 dictionary_id = 3;
+  optional string key = 4;
 }
 
 message TokenListResp {
@@ -323,179 +449,9 @@ message TokenListResp {
   repeated TokenInfo data = 2;
 }
 
-message OauthLoginReq {
-  string state = 1;
-  string provider = 2;
-}
-
-message OauthRedirectResp {
-  string url = 1;
-}
-
-message OauthProviderInfo {
-  optional uint64 id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional string name = 4;
-  optional string client_id = 5;
-  optional string client_secret = 6;
-  optional string redirect_url = 7;
-  optional string scopes = 8;
-  optional string auth_url = 9;
-  optional string token_url = 10;
-  optional uint64 auth_style = 11;
-  optional string info_url = 12;
-}
-
-message OauthProviderListResp {
-  uint64 total = 1;
-  repeated OauthProviderInfo data = 2;
-}
-
-message UsernameReq {
-  string username = 1;
-}
-
-message WorkflowDeleteResponse {}
-
-message LogEntry {
-  string content = 1;
-  string podName = 2;
-}
-
-message PositionInfo {
-  optional uint64 id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional uint32 status = 4;
-  optional uint32 sort = 5;
-  optional string name = 6;
-  optional string code = 7;
-  optional string remark = 8;
-}
-
-message TokenInfo {
-  optional string id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional uint32 status = 4;
-  optional string uuid = 5;
-  optional string token = 6;
-  optional string source = 7;
-  optional int64 expired_at = 8;
-}
-
-message UserListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string username = 3;
-  optional string nickname = 4;
-  optional string email = 5;
-  optional string mobile = 6;
-  repeated uint64 role_ids = 7;
-  optional uint64 department_id = 8;
-  repeated uint64 position_ids = 9;
-}
-
-message WorkflowResubmitRequest {
-  string name = 1;
-  string namespace = 2;
-  bool memoized = 3;
-  repeated string parameters = 5;
-}
-
-//  return the role's authorization menu's ids
-message RoleMenuAuthorityResp {
-  repeated uint64 menu_id = 1;
-}
-
-message DepartmentInfo {
-  optional uint64 id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional uint32 status = 4;
-  optional uint32 sort = 5;
-  optional string name = 6;
-  optional string ancestors = 7;
-  optional string leader = 8;
-  optional string phone = 9;
-  optional string email = 10;
-  optional string remark = 11;
-  optional uint64 parent_id = 12;
-}
-
-message RoleListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string name = 3;
-  optional string code = 4;
-  optional string default_router = 5;
-}
-
-message TokenListReq {
-  uint64 page = 1;
-  uint64 page_size = 2;
-  optional string username = 3;
-  optional string nickname = 4;
-  optional string email = 5;
-  optional string uuid = 6;
-}
-
 message WorkflowResumeRequest {
   string name = 1;
   string namespace = 2;
-  string nodeFieldSelector = 3;
-}
-
-message WorkflowDeleteRequest {
-  string name = 1;
-  string namespace = 2;
-  k8s.io.apimachinery.pkg.apis.meta.v1.DeleteOptions deleteOptions = 3;
-  bool force = 4;
-}
-
-message ApiListResp {
-  uint64 total = 1;
-  repeated ApiInfo data = 2;
-}
-
-message DictionaryListResp {
-  uint64 total = 1;
-  repeated DictionaryInfo data = 2;
-}
-
-message BaseIDResp {
-  uint64 id = 1;
-  string msg = 2;
-}
-
-message RoleInfo {
-  optional uint64 id = 1;
-  optional int64 created_at = 2;
-  optional int64 updated_at = 3;
-  optional uint32 status = 4;
-  optional string name = 5;
-  optional string code = 6;
-  optional string default_router = 7;
-  optional string remark = 8;
-  optional uint32 sort = 9;
-}
-
-message WorkflowSetRequest {
-  string name = 1;
-  string namespace = 2;
-  string nodeFieldSelector = 3;
-  string message = 4;
-  string phase = 5;
-  string outputParameters = 6;
-}
-
-message IDReq {
-  uint64 id = 1;
-}
-
-message UUIDReq {
-  string id = 1;
 }
 
 service Core {
@@ -626,38 +582,28 @@ service Core {
   rpc deleteUser(UUIDsReq) returns (BaseResp);
   //  Workflow management
   //  group: workflow
-  rpc CreateWorkflow(WorkflowCreateRequest) returns (WorkflowRespond);
+  rpc CreateWorkflow(WorkflowCreateRequest) returns (WorkflowResponse);
   //  group: workflow
-  rpc GetWorkflow(WorkflowGetRequest) returns (WorkflowRespond);
+  rpc GetWorkflow(WorkflowGetRequest) returns (WorkflowResponse);
   //  group: workflow
-  rpc ListWorkflows(WorkflowListRequest) returns (WorkflowListRespond);
+  rpc ListWorkflows(WorkflowListRequest) returns (WorkflowListResponse);
   //  group: workflow
   rpc WatchWorkflows(WatchWorkflowsRequest) returns (stream WorkflowWatchEvent);
   //  group: workflow
-  rpc WatchEvents(WatchEventsRequest) returns (stream Event);
-  //  group: workflow
   rpc DeleteWorkflow(WorkflowDeleteRequest) returns (WorkflowDeleteResponse);
   //  group: workflow
-  rpc RetryWorkflow(WorkflowRetryRequest) returns (WorkflowRespond);
+  rpc RetryWorkflow(WorkflowRetryRequest) returns (WorkflowResponse);
   //  group: workflow
-  rpc ResubmitWorkflow(WorkflowResubmitRequest) returns (WorkflowRespond);
+  rpc ResubmitWorkflow(WorkflowResubmitRequest) returns (WorkflowResponse);
   //  group: workflow
-  rpc ResumeWorkflow(WorkflowResumeRequest) returns (WorkflowRespond);
+  rpc ResumeWorkflow(WorkflowResumeRequest) returns (WorkflowResponse);
   //  group: workflow
-  rpc SuspendWorkflow(WorkflowSuspendRequest) returns (WorkflowRespond);
+  rpc SuspendWorkflow(WorkflowSuspendRequest) returns (WorkflowResponse);
   //  group: workflow
-  rpc TerminateWorkflow(WorkflowTerminateRequest) returns (WorkflowRespond);
+  rpc TerminateWorkflow(WorkflowTerminateRequest) returns (WorkflowResponse);
   //  group: workflow
-  rpc StopWorkflow(WorkflowStopRequest) returns (WorkflowRespond);
-  //  group: workflow
-  rpc SetWorkflow(WorkflowSetRequest) returns (WorkflowRespond);
-  //  group: workflow
-  rpc LintWorkflow(WorkflowLintRequest) returns (WorkflowRespond);
+  rpc LintWorkflow(WorkflowLintRequest) returns (WorkflowResponse);
   //  group: workflow
   rpc PodLogs(WorkflowLogRequest) returns (stream LogEntry);
-  //  group: workflow
-  rpc WorkflowLogs(WorkflowLogRequest) returns (stream LogEntry);
-  //  group: workflow
-  rpc SubmitWorkflow(WorkflowSubmitRequest) returns (WorkflowRespond);
 }
 

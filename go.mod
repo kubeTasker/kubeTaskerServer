@@ -1,6 +1,8 @@
 module github.com/kubeTasker/kubeTaskerServer
 
-go 1.20
+go 1.21
+
+toolchain go1.21.4
 
 require (
 	entgo.io/ent v0.12.5
@@ -8,6 +10,7 @@ require (
 	github.com/casbin/casbin/v2 v2.79.0
 	github.com/duke-git/lancet/v2 v2.2.7
 	github.com/gofrs/uuid/v5 v5.0.0
+	github.com/kubeTasker/kubeTasker v0.1.0
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/suyuan32/simple-admin-common v1.2.4
 	github.com/suyuan32/simple-admin-job v1.2.4
