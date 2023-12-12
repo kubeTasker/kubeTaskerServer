@@ -1,14 +1,22 @@
 syntax = "proto3";
+option go_package = "github.com/kubeTasker/kubeTasker/pkg/apiclient";
 
-import "k8s.io/apimachinery@v0.28.4/pkg/apis/meta/v1/generated.proto";
-import "github.com/argoproj/argo-workflows/v3@v3.5.2/pkg/apis/workflow/v1alpha1/generated.proto";
-import "k8s.io/api@v0.28.4/core/v1/generated.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
+import "github.com/kubeTasker/kubeTasker/pkg/apis/workflow/v1alpha1/generated.proto";
+import "k8s.io/api/core/v1/generated.proto";
+
+// Workflow Service
+//
+// Workflow Service API performs CRUD actions against application resources
+package workflow;
+
 
 message WorkflowCreateRequest {
     string namespace = 1;
-    github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow workflow = 2;
-    // This field is no longer used.
-    string instanceID = 3 [ deprecated = true ];
+    github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow workflow = 2;
+    string instanceID = 3;
     bool serverDryRun = 4;
     k8s.io.apimachinery.pkg.apis.meta.v1.CreateOptions createOptions = 5;
 }
@@ -17,57 +25,31 @@ message WorkflowGetRequest {
     string name = 1;
     string namespace = 2;
     k8s.io.apimachinery.pkg.apis.meta.v1.GetOptions getOptions = 3;
-    // Fields to be included or excluded in the response. e.g. "spec,status.phase", "-status.nodes"
-    string fields = 4;
 }
 
 message WorkflowListRequest {
     string namespace = 1;
     k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions listOptions = 2;
-    // Fields to be included or excluded in the response. e.g. "items.spec,items.status.phase", "-items.status.nodes"
-    string fields = 3;
 }
 
 message WorkflowResubmitRequest {
     string name = 1;
     string namespace = 2;
     bool memoized = 3;
-    repeated string parameters = 5;
 }
 
 message WorkflowRetryRequest {
     string name = 1;
     string namespace = 2;
-    bool restartSuccessful = 3;
-    string nodeFieldSelector = 4;
-    repeated string parameters = 5;
 }
-
 message WorkflowResumeRequest {
     string name = 1;
     string namespace = 2;
-    string nodeFieldSelector = 3;
 }
 
 message WorkflowTerminateRequest {
     string name = 1;
     string namespace = 2;
-}
-
-message WorkflowStopRequest {
-    string name = 1;
-    string namespace = 2;
-    string nodeFieldSelector = 3;
-    string message = 4;
-}
-
-message WorkflowSetRequest {
-    string name = 1;
-    string namespace = 2;
-    string nodeFieldSelector = 3;
-    string message = 4;
-    string phase = 5;
-    string outputParameters = 6;
 }
 
 message WorkflowSuspendRequest {
@@ -80,15 +62,12 @@ message WorkflowLogRequest {
     string namespace = 2;
     string podName = 3;
     k8s.io.api.core.v1.PodLogOptions logOptions = 4;
-    string grep = 5;
-    string selector = 6;
 }
 
 message WorkflowDeleteRequest {
     string name = 1;
     string namespace = 2;
     k8s.io.apimachinery.pkg.apis.meta.v1.DeleteOptions deleteOptions = 3;
-    bool force = 4;
 }
 
 message WorkflowDeleteResponse {
@@ -97,83 +76,99 @@ message WorkflowDeleteResponse {
 message WatchWorkflowsRequest {
     string namespace = 1;
     k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions listOptions = 2;
-    string fields = 3;
 }
 
 message WorkflowWatchEvent {
     // the type of change
     string type = 1;
     // the workflow
-    github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow object = 2;
-}
-
-message WatchEventsRequest {
-    string namespace = 1;
-    k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions listOptions = 2;
+    github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow object = 2;
 }
 
 message LogEntry {
     string content = 1;
-    string podName = 2;
 }
 
 message WorkflowLintRequest {
     string namespace = 1;
-    github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow workflow = 2;
+    github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow workflow = 2;
 }
 
-message WorkflowSubmitRequest {
-    string namespace = 1;
-    string resourceKind = 2;
-    string resourceName = 3;
-    github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.SubmitOpts submitOptions = 4;
-}
-message WorkflowRespond {
-    github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow workflow=1;
+message WorkflowResponse {
+    github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow workflow = 1;
 }
 
-message WorkflowListRespond {
-    github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.WorkflowList workflowList=1;
-}
-
-message Event {
-    k8s.io.api.core.v1.Event event = 1;
+message WorkflowListResponse {
+    github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.WorkflowList workflowlist = 1;
 }
 
 service Core {
-    // Workflow management
-    // group: workflow
-    rpc CreateWorkflow (WorkflowCreateRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc GetWorkflow (WorkflowGetRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc ListWorkflows (WorkflowListRequest) returns (WorkflowListRespond);
-    // group: workflow
-    rpc WatchWorkflows (WatchWorkflowsRequest) returns (stream WorkflowWatchEvent);
-    // group: workflow
-    rpc WatchEvents(WatchEventsRequest) returns (stream Event);
-    // group: workflow
-    rpc DeleteWorkflow (WorkflowDeleteRequest) returns (WorkflowDeleteResponse);
-    // group: workflow
-    rpc RetryWorkflow (WorkflowRetryRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc ResubmitWorkflow (WorkflowResubmitRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc ResumeWorkflow (WorkflowResumeRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc SuspendWorkflow (WorkflowSuspendRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc TerminateWorkflow (WorkflowTerminateRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc StopWorkflow(WorkflowStopRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc SetWorkflow(WorkflowSetRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc LintWorkflow (WorkflowLintRequest) returns (WorkflowRespond);
-    // group: workflow
-    rpc PodLogs (WorkflowLogRequest) returns (stream LogEntry);
-    // group: workflow
-    rpc WorkflowLogs(WorkflowLogRequest) returns (stream LogEntry);
-    // group: workflow
-    rpc SubmitWorkflow(WorkflowSubmitRequest) returns (WorkflowRespond);
+    rpc CreateWorkflow (WorkflowCreateRequest) returns (WorkflowResponse) {
+        option (google.api.http) = {
+			post: "/api/v1/workflows/{namespace}"
+			body: "*"
+		};
+    }
+
+    rpc GetWorkflow (WorkflowGetRequest) returns (WorkflowResponse) {
+        option (google.api.http).get = "/api/v1/workflows/{namespace}/{name}";
+    }
+
+    rpc ListWorkflows (WorkflowListRequest) returns (WorkflowListResponse) {
+        option (google.api.http).get = "/api/v1/workflows/{namespace}";
+    }
+
+    rpc WatchWorkflows (WatchWorkflowsRequest) returns (stream WorkflowWatchEvent) {
+        option (google.api.http).get = "/api/v1/workflow-events/{namespace}";
+    }
+
+    rpc DeleteWorkflow (WorkflowDeleteRequest) returns (WorkflowDeleteResponse) {
+        option (google.api.http).delete = "/api/v1/workflows/{namespace}/{name}";
+    }
+
+    rpc RetryWorkflow (WorkflowRetryRequest) returns (WorkflowResponse) {
+        option (google.api.http) = {
+			put: "/api/v1/workflows/{namespace}/{name}/retry"
+			body: "*"
+		};
+    }
+
+    rpc ResubmitWorkflow (WorkflowResubmitRequest) returns (WorkflowResponse) {
+        option (google.api.http) = {
+			put: "/api/v1/workflows/{namespace}/{name}/resubmit"
+			body: "*"
+		};
+    }
+
+    rpc ResumeWorkflow (WorkflowResumeRequest) returns (WorkflowResponse) {
+        option (google.api.http) = {
+			put: "/api/v1/workflows/{namespace}/{name}/resume"
+			body: "*"
+		};
+    }
+
+    rpc SuspendWorkflow (WorkflowSuspendRequest) returns (WorkflowResponse) {
+        option (google.api.http) = {
+			put: "/api/v1/workflows/{namespace}/{name}/suspend"
+			body: "*"
+		};
+    }
+
+    rpc TerminateWorkflow (WorkflowTerminateRequest) returns (WorkflowResponse) {
+        option (google.api.http) = {
+			put: "/api/v1/workflows/{namespace}/{name}/terminate"
+			body: "*"
+		};
+    }
+
+    rpc LintWorkflow (WorkflowLintRequest) returns (WorkflowResponse) {
+        option (google.api.http) = {
+			post: "/api/v1/workflows/{namespace}/lint"
+			body: "*"
+		};
+    }
+
+    rpc PodLogs (WorkflowLogRequest) returns (stream LogEntry) {
+        option (google.api.http).get = "/api/v1/workflows/{namespace}/{name}/{podName}/log";
+    }
 }
