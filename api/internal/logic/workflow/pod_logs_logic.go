@@ -2,8 +2,6 @@ package workflow
 
 import (
 	"context"
-	"github.com/kubeTasker/kubeTaskerServer/rpc/types/core"
-	"io"
 
 	"github.com/kubeTasker/kubeTaskerServer/api/internal/svc"
 	"github.com/kubeTasker/kubeTaskerServer/api/internal/types"
@@ -24,31 +22,8 @@ func NewPodLogsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PodLogsLo
 		svcCtx: svcCtx}
 }
 
-func (l *PodLogsLogic) PodLogs(req *types.WorkflowLogRequest) (resp *types.LogEntryList, err error) {
+func (l *PodLogsLogic) PodLogs(req *types.WorkflowLogRequest) (resp *types.LogEntrys, err error) {
 	// todo: add your logic here and delete this line
-	streamLogEntry, err := l.svcCtx.CoreRpc.PodLogs(l.ctx, &core.WorkflowLogRequest{
-		Name:       req.Name,
-		Namespace:  req.Namespace,
-		PodName:    req.PodName,
-		LogOptions: req.LogOptions,
-		Grep:       req.Grep,
-		Selector:   req.Selector,
-	})
-	if err != nil {
-		return nil, err
-	}
-	for {
-		res, err := streamLogEntry.Recv()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil, err
-		}
-		resp.LogEntryList = append(resp.LogEntryList, types.LogEntry{
-			Content: res.Content,
-			PodName: res.PodName,
-		})
-	}
-	return resp, nil
+
+	return
 }

@@ -2,13 +2,10 @@
 package types
 
 import (
-	v1alpha1 "github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1"
+	"github.com/kubeTasker/kubeTasker/pkg/apis/workflow/v1alpha1"
 	v11 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
-
-type TypeNull struct {
-}
 
 // The basic response with data | 基础带数据信息
 // swagger:model BaseDataInfo
@@ -1587,23 +1584,54 @@ type SendEmailReq struct {
 	Provider *string `json:"provider,optional"`
 }
 
+// WorkflowCreateRequest
 type WorkflowCreateRequest struct {
 	// Namespace
 	Namespace string `json:"namespace"`
 	// Workflow
-	// type :github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
+	// github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow
 	Workflow *v1alpha1.Workflow `json:"workflow"`
 	// InstanceID
-	// This field is no longer used.
 	InstanceID string `json:"instanceId"`
 	// ServerDryRun
 	ServerDryRun bool `json:"serverDryRun"`
 	// CreateOptions
-	// type: k8s.io.apimachinery.pkg.apis.meta.v1.CreateOptions
+	// k8s.io.apimachinery.pkg.apis.meta.v1.CreateOptions
 	CreateOptions *v1.CreateOptions `json:"createOptions"`
 }
 
-type WorkflowTerminateRequest struct {
+// WorkflowGetRequest
+type WorkflowGetRequest struct {
+	// Name
+	Name string `json:"name"`
+	// Namespace
+	Namespace string `json:"namespace"`
+	// GetOptions
+	// k8s.io.apimachinery.pkg.apis.meta.v1.GetOptions
+	GetOptions *v1.GetOptions `json:"getOptions"`
+}
+
+// WorkflowListRequest
+type WorkflowListRequest struct {
+	// Namespace
+	Namespace string `json:"namespace"`
+	// ListOptions
+	// k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
+	ListOptions TypeNull `json:"listOptions"`
+}
+
+// WorkflowResubmitRequest
+type WorkflowResubmitRequest struct {
+	// Name
+	Name string `json:"name"`
+	// Namespace
+	Namespace string `json:"namespace"`
+	// Memoized
+	Memoized bool `json:"memoized"`
+}
+
+// WorkflowRetryRequest
+type WorkflowRetryRequest struct {
 	// Name
 	Name string `json:"name"`
 	// Namespace
@@ -1616,8 +1644,22 @@ type WorkflowResumeRequest struct {
 	Name string `json:"name"`
 	// Namespace
 	Namespace string `json:"namespace"`
-	// NodeFieldSelector
-	NodeFieldSelector string `json:"nodeFieldSelector"`
+}
+
+// WorkflowTerminateRequest
+type WorkflowTerminateRequest struct {
+	// Name
+	Name string `json:"name"`
+	// Namespace
+	Namespace string `json:"namespace"`
+}
+
+// WorkflowSuspendRequest
+type WorkflowSuspendRequest struct {
+	// Name
+	Name string `json:"name"`
+	// Namespace
+	Namespace string `json:"namespace"`
 }
 
 // WorkflowLogRequest
@@ -1629,125 +1671,8 @@ type WorkflowLogRequest struct {
 	// PodName
 	PodName string `json:"podName"`
 	// LogOptions
-	// type: k8s.io.api.core.v1.PodLogOptions
+	// k8s.io.api.core.v1.PodLogOptions
 	LogOptions *v11.PodLogOptions `json:"logOptions"`
-	// Grep
-	Grep string `json:"grep"`
-	// Selector
-	Selector string `json:"selector"`
-}
-
-// WorkflowSetRequest
-type WorkflowSetRequest struct {
-	// Name
-	Name string `json:"name"`
-	// Namespace
-	Namespace string `json:"namespace"`
-	// NodeFieldSelector
-	NodeFieldSelector string `json:"nodeFieldSelector"`
-	// Message
-	Message string `json:"message"`
-	// Phase
-	Phase string `json:"phase"`
-	// OutputParameters
-	OutputParameters string `json:"outputParameters"`
-}
-
-// WorkflowListRequest
-type WorkflowListRequest struct {
-	// Namespace
-	Namespace string `json:"namespace"`
-	// ListOptions
-	// type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
-	ListOptions *v1.ListOptions `json:"listOptions"`
-	// Fields
-	Fields string `json:"fields"`
-}
-
-// WorkflowDeleteResponse
-type WorkflowDeleteResponse struct {
-}
-
-// WorkflowWatchEvent
-type WorkflowWatchEvent struct {
-	// Type
-	Type string `json:"type"`
-	// Object
-	// type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
-	Object *v1alpha1.Workflow `json:"object"`
-}
-
-// LogEntry
-type LogEntry struct {
-	// Content
-	Content string `json:"content"`
-	// PodName
-	PodName string `json:"podName"`
-}
-
-// WorkflowGetRequest
-type WorkflowGetRequest struct {
-	// Name
-	Name string `json:"name"`
-	// Namespace
-	Namespace string `json:"namespace"`
-	// GetOptions
-	// type: k8s.io.apimachinery.pkg.apis.meta.v1.GetOptions
-	GetOptions *v1.GetOptions `json:"getOptions"`
-	// Fields
-	Fields string `json:"fields"`
-}
-
-// WatchWorkflowsRequest
-type WatchWorkflowsRequest struct {
-	// Namespace
-	Namespace string `json:"namespace"`
-	// ListOptions
-	// type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
-	ListOptions *v1.ListOptions `json:"listOptions"`
-	// Fields
-	Fields string `json:"fields"`
-}
-
-// WorkflowResubmitRequest
-type WorkflowResubmitRequest struct {
-	// Name
-	Name string `json:"name"`
-	// Namespace
-	Namespace string `json:"namespace"`
-	// Memoized
-	Memoized bool `json:"memoized"`
-	// Parameters
-	Parameters []string `json:"parameters"`
-}
-
-// WorkflowStopRequest
-type WorkflowStopRequest struct {
-	// Name
-	Name string `json:"name"`
-	// Namespace
-	Namespace string `json:"namespace"`
-	// NodeFieldSelector
-	NodeFieldSelector string `json:"nodeFieldSelector"`
-	// Message
-	Message string `json:"message"`
-}
-
-// WatchEventsRequest
-type WatchEventsRequest struct {
-	// Namespace
-	Namespace string `json:"namespace"`
-	// ListOptions
-	// type: k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
-	ListOptions *v1.ListOptions `json:"listOptions"`
-}
-
-// WorkflowSuspendRequest
-type WorkflowSuspendRequest struct {
-	// Name
-	Name string `json:"name"`
-	// Namespace
-	Namespace string `json:"namespace"`
 }
 
 // WorkflowDeleteRequest
@@ -1757,10 +1682,36 @@ type WorkflowDeleteRequest struct {
 	// Namespace
 	Namespace string `json:"namespace"`
 	// DeleteOptions
-	// type: k8s.io.apimachinery.pkg.apis.meta.v1.DeleteOptions
+	// k8s.io.apimachinery.pkg.apis.meta.v1.DeleteOptions
 	DeleteOptions *v1.DeleteOptions `json:"deleteOptions"`
-	// Force
-	Force bool `json:"force"`
+}
+
+// WorkflowDeleteResponse
+type WorkflowDeleteResponse struct {
+}
+
+// WatchWorkflowsRequest
+type WatchWorkflowsRequest struct {
+	// Namespace
+	Namespace string `json:"namespace"`
+	// ListOptions
+	// k8s.io.apimachinery.pkg.apis.meta.v1.ListOptions
+	ListOptions *v1.ListOptions `json:"listOptions"`
+}
+
+// WorkflowWatchEvent
+type WorkflowWatchEvent struct {
+	// Type
+	Type string `json:"type"`
+	// Object
+	// github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow
+	Object *v1alpha1.Workflow `json:"object"`
+}
+
+// LogEntry
+type LogEntry struct {
+	// Content
+	Content string `json:"content"`
 }
 
 // WorkflowLintRequest
@@ -1768,66 +1719,36 @@ type WorkflowLintRequest struct {
 	// Namespace
 	Namespace string `json:"namespace"`
 	// Workflow
-	// type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
+	// github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow
 	Workflow *v1alpha1.Workflow `json:"workflow"`
 }
 
-// WorkflowRetryRequest
-type WorkflowRetryRequest struct {
-	// Name
-	Name string `json:"name"`
-	// Namespace
-	Namespace string `json:"namespace"`
-	// RestartSuccessful
-	RestartSuccessful bool `json:"restartSuccessful"`
-	// NodeFieldSelector
-	NodeFieldSelector string `json:"nodeFieldSelector"`
-	// Parameters
-	Parameters []string `json:"parameters"`
-}
-
-// WorkflowRespond
-type WorkflowRespond struct {
+// WorkflowResponse
+type WorkflowResponse struct {
 	// Workflow
-	// type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.Workflow
+	// github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.Workflow
 	Workflow *v1alpha1.Workflow `json:"workflow"`
 }
 
-// WorkflowListRespond
-type WorkflowListRespond struct {
-	// WorkflowList
-	// type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.WorkflowList
-	WorkflowList *v1alpha1.WorkflowList `json:"workflowList"`
+// WorkflowListResponse
+type WorkflowListResponse struct {
+	// Workflowlist
+	// github.com.kubeTasker.kubeTasker.pkg.apis.workflow.v1alpha1.WorkflowList
+	Workflowlist *v1alpha1.WorkflowList `json:"workflowlist"`
 }
 
-// Event
-type Event struct {
-	// Event
-	// type: k8s.io.api.core.v1.Event
-	Event *v11.Event `json:"event"`
+// TypeNull
+type TypeNull struct {
 }
 
-// WorkflowSubmitRequest
-type WorkflowSubmitRequest struct {
-	// Namespace
-	Namespace string `json:"namespace"`
-	// ResourceKind
-	ResourceKind string `json:"resourceKind"`
-	// ResourceName
-	ResourceName string `json:"resourceName"`
-	// SubmitOptions
-	// type: github.com.argoproj.argo_workflows.v3.pkg.apis.workflow.v1alpha1.SubmitOpts
-	SubmitOptions *v1alpha1.SubmitOpts `json:"submitOptions"`
+// WorkflowWatchEvents
+// Used to receive streams, not equally useful
+type WorkflowWatchEvents struct {
+	WorkflowWatchEvents []WorkflowWatchEvent `json:"workflowWatchEvents"`
 }
 
-type WorkflowWatchEventList struct {
-	WorkflowWatchEventList []WorkflowWatchEvent `json:"workflowWatchEventList"`
-}
-
-type EventList struct {
-	EventList []Event `json:"eventList"`
-}
-
-type LogEntryList struct {
-	LogEntryList []LogEntry `json:"logEntryList"`
+// LogEntrys
+// Used to receive streams, not equally useful
+type LogEntrys struct {
+	LogEntrys []LogEntry `json:"logEntrys"`
 }

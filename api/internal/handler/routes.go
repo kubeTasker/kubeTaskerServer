@@ -784,12 +784,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Route{
 				{
 					Method:  http.MethodPost,
-					Path:    "/workflow/create_workflow/:namespace",
+					Path:    "/workflow/create_workflow",
 					Handler: workflow.CreateWorkflowHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/workflow/get_workflow/:namespcae/:name",
+					Path:    "/workflow/get_workflow/:namespace/:name",
 					Handler: workflow.GetWorkflowHandler(serverCtx),
 				},
 				{
@@ -803,69 +803,44 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: workflow.WatchWorkflowsHandler(serverCtx),
 				},
 				{
-					Method:  http.MethodGet,
-					Path:    "/workflow/watch_events/:namespace",
-					Handler: workflow.WatchEventsHandler(serverCtx),
-				},
-				{
 					Method:  http.MethodDelete,
 					Path:    "/workflow/delete_workflow/:namespace/:name",
 					Handler: workflow.DeleteWorkflowHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
-					Path:    "/workflow/retry_workflow/:namespace/:name/retey",
+					Path:    "/workflow/retry_workflow/:namespace/:name",
 					Handler: workflow.RetryWorkflowHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
-					Path:    "/workflow/resubmit_workflow/:namespace/:name/resubmit",
+					Path:    "/workflow/resubmit_workflow/:namespace/:name",
 					Handler: workflow.ResubmitWorkflowHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
-					Path:    "/workflow/resume_workflow/:namespace/:name/resume",
+					Path:    "/workflow/resume_workflow/:namespace/:name",
 					Handler: workflow.ResumeWorkflowHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
-					Path:    "/workflow/suspend_workflow/:namespace/:name/suspend",
+					Path:    "/workflow/suspend_workflow/:namespace/:name",
 					Handler: workflow.SuspendWorkflowHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodPut,
-					Path:    "/workflow/terminate_workflow/:namespace/:name/terminate",
+					Path:    "/workflow/terminate_workflow/:namespace/:name",
 					Handler: workflow.TerminateWorkflowHandler(serverCtx),
 				},
 				{
-					Method:  http.MethodPut,
-					Path:    "/workflow/stop_workflow/:namespace/:name/stop",
-					Handler: workflow.StopWorkflowHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPut,
-					Path:    "/workflow/set_workflow/:namespace/:name/set",
-					Handler: workflow.SetWorkflowHandler(serverCtx),
-				},
-				{
 					Method:  http.MethodPost,
-					Path:    "/workflow/lint_workflow/:namespace/lint",
+					Path:    "/workflow/lint_workflow/:namespace",
 					Handler: workflow.LintWorkflowHandler(serverCtx),
 				},
 				{
 					Method:  http.MethodGet,
-					Path:    "/workflow/pod_logs/:namespace/:name/:podName/log",
+					Path:    "/workflow/pod_logs/:namespace/:name/:podName",
 					Handler: workflow.PodLogsHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodGet,
-					Path:    "/workflow/workflow_logs/:namespace/:name/log",
-					Handler: workflow.WorkflowLogsHandler(serverCtx),
-				},
-				{
-					Method:  http.MethodPost,
-					Path:    "/workflow/submit_workflow/:namespace/submit",
-					Handler: workflow.SubmitWorkflowHandler(serverCtx),
 				},
 			}...,
 		),
