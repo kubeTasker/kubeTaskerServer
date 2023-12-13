@@ -2,7 +2,6 @@ package workflow
 
 import (
 	"context"
-	"github.com/kubeTasker/kubeTaskerServer/rpc/types/core"
 
 	"github.com/kubeTasker/kubeTaskerServer/api/internal/svc"
 	"github.com/kubeTasker/kubeTaskerServer/api/internal/types"
@@ -23,16 +22,8 @@ func NewLintWorkflowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Lint
 		svcCtx: svcCtx}
 }
 
-func (l *LintWorkflowLogic) LintWorkflow(req *types.WorkflowLintRequest) (resp *types.WorkflowRespond, err error) {
+func (l *LintWorkflowLogic) LintWorkflow(req *types.WorkflowLintRequest) (resp *types.WorkflowResponse, err error) {
 	// todo: add your logic here and delete this line
-	workflow, err := l.svcCtx.CoreRpc.LintWorkflow(l.ctx, &core.WorkflowLintRequest{
-		Namespace: req.Namespace,
-		Workflow:  req.Workflow,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &types.WorkflowRespond{
-		Workflow: workflow.Workflow,
-	}, nil
+
+	return
 }

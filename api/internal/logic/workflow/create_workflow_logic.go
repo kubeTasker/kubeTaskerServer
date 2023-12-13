@@ -2,7 +2,6 @@ package workflow
 
 import (
 	"context"
-	"github.com/kubeTasker/kubeTaskerServer/rpc/types/core"
 
 	"github.com/kubeTasker/kubeTaskerServer/api/internal/svc"
 	"github.com/kubeTasker/kubeTaskerServer/api/internal/types"
@@ -23,19 +22,8 @@ func NewCreateWorkflowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Cr
 		svcCtx: svcCtx}
 }
 
-func (l *CreateWorkflowLogic) CreateWorkflow(req *types.WorkflowCreateRequest) (resp *types.WorkflowRespond, err error) {
+func (l *CreateWorkflowLogic) CreateWorkflow(req *types.WorkflowCreateRequest) (resp *types.WorkflowResponse, err error) {
 	// todo: add your logic here and delete this line
-	workflow, err := l.svcCtx.CoreRpc.CreateWorkflow(l.ctx, &core.WorkflowCreateRequest{
-		Namespace:     req.Namespace,
-		Workflow:      req.Workflow,
-		InstanceID:    req.InstanceID,
-		ServerDryRun:  req.ServerDryRun,
-		CreateOptions: req.CreateOptions,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &types.WorkflowRespond{
-		Workflow: workflow.Workflow,
-	}, nil
+
+	return
 }
