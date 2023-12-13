@@ -5,6 +5,7 @@ import (
 
 	"github.com/kubeTasker/kubeTaskerServer/rpc/internal/svc"
 	"github.com/kubeTasker/kubeTaskerServer/rpc/types/core"
+	"k8s.io/apimachinery/pkg/labels"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,7 +25,13 @@ func NewListWorkflowsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Lis
 }
 
 func (l *ListWorkflowsLogic) ListWorkflows(in *core.WorkflowListRequest) (*core.WorkflowListResponse, error) {
-	// todo: add your logic here and delete this line
-
-	return &core.WorkflowListResponse{}, nil
+	labelSelector := labels.NewSelector()
+	listOpts := *in.ListOptions
+	listOpts.LabelSelector = labelSelector.String()
+	
+	wfList, err := l.svcCtx.WFConfig.WFClient.List(context.TODO(), listOpts)
+	if err != nil {
+		return &core.WorkflowListResponse{}, nil
+	}
+	return &core.WorkflowListResponse{Workflowlist: wfList}, nil
 }

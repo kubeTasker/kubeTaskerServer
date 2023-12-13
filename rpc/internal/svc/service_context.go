@@ -12,9 +12,10 @@ import (
 
 type ServiceContext struct {
 	context.Context
-	Config config.Config
-	DB     *ent.Client
-	Redis  *redis.Redis
+	Config   config.Config
+	DB       *ent.Client
+	Redis    *redis.Redis
+	WFConfig *config.WorkflowConfig
 }
 
 func NewServiceContext(c config.Config) (ctx *ServiceContext, err error) {
@@ -29,9 +30,10 @@ func NewServiceContext(c config.Config) (ctx *ServiceContext, err error) {
 	}
 
 	return &ServiceContext{
-		Config: c,
-		DB:     db,
-		Redis:  redis.MustNewRedis(c.RedisConf),
+		Config:   c,
+		DB:       db,
+		Redis:    redis.MustNewRedis(c.RedisConf),
+		WFConfig: config.NewWorkflowConfig(),
 	}, nil
 
 }
