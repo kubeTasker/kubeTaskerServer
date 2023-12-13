@@ -26,8 +26,5 @@ func NewWatchWorkflowsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Wa
 func (l *WatchWorkflowsLogic) WatchWorkflows(in *core.WatchWorkflowsRequest, stream core.Core_WatchWorkflowsServer) error {
 	// todo: add your logic here and delete this line
 
-	// Stream must supplement other logic by itself, and the logic is incomplete.
-	// /root/TeamProject/kubeTaskerServer/rpc/types/core/core_grpc.pb.go
-
 	return nil
 }
