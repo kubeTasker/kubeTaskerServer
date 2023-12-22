@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://i.postimg.cc/nh8mVKkf/logo.png" width="300px" height="300px"/>
+<img src="https://raw.githubusercontent.com/kubeTasker/kubeTaskerServer/master/logo.png" width="300px" height="300px"/>
 <h1>KubeTasker</h1>
 </div>
 
