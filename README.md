@@ -1,6 +1,6 @@
 <div align="center">
 <img src="https://i.postimg.cc/nh8mVKkf/logo.png" width="300px" height="300px"/>
-<h1>Simple Admin</h1>
+<h1>KubeTasker</h1>
 </div>
 
 **中文** 
